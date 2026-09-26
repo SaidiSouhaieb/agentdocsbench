@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentdocsbench"
+version = "0.1.0"
+description = "Test whether coding agents can use product documentation to complete programming tasks."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Souhaieb Saidi" }]
+requires-python = ">=3.12"
+
+[project.urls]
+Homepage = "https://github.com/SaidiSouhaieb/agentdocsbench"
+Repository = "https://github.com/SaidiSouhaieb/agentdocsbench"
+dependencies = [
+    "pydantic>=2",
+    "PyYAML>=6",
+    "pytest>=8",
+    "typer>=0.12",
+    "rich>=13",
+]
+
+[project.scripts]
+agentdocs = "agentdocs.cli:app"
+
+[tool.setuptools.packages.find]
+include = ["agentdocs*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

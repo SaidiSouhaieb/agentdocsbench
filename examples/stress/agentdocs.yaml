@@ -1,0 +1,160 @@
+version: 1
+
+docs: ./docs
+starter: ./benchmark/starter
+
+agent:
+  type: codex
+
+tasks:
+  - id: client_initialization
+    prompt: |
+      Using the Nimbus documentation, implement the application helper that
+      builds a Nimbus client from a JSON configuration file. Pass through the
+      documented fields. Do not hard-code the sample API key.
+
+    verify:
+      path: ./benchmark/verifiers/client_initialization
+      command: python3 check.py
+
+  - id: user_creation
+    prompt: |
+      Using the Nimbus documentation, implement application user creation.
+      The result must include the id, name, email, and metadata returned by
+      the current Users API. Do not call the deprecated client method.
+
+    verify:
+      path: ./benchmark/verifiers/user_creation
+      command: python3 check.py
+
+  - id: organization_membership
+    prompt: |
+      Using the Nimbus documentation, implement the helper that creates an
+      organization, creates a user, and adds that user with the requested
+      role. The user must exist before the membership is created.
+
+    verify:
+      path: ./benchmark/verifiers/organization_membership
+      command: python3 check.py
+
+  - id: pagination
+    prompt: |
+      Using the Nimbus documentation, implement the helper that returns every
+      user from the paginated Users API. Follow next_cursor until it is
+      exhausted and keep the documented page size. Do not hard-code ids.
+
+    verify:
+      path: ./benchmark/verifiers/pagination
+      command: python3 check.py
+
+  - id: error_mapping
+    prompt: |
+      Using the Nimbus documentation, map SDK exceptions to application
+      errors. Cover authentication, missing records, rate limits, and any
+      other Nimbus error. Reject exceptions that are not Nimbus errors.
+
+    verify:
+      path: ./benchmark/verifiers/error_mapping
+      command: python3 check.py
+
+  - id: retry_policy
+    prompt: |
+      Using the Nimbus documentation, implement the application retry loop.
+      Retry only the documented status codes, stop at the documented attempt
+      limit, and report backoff through the policy sleeper. Do not sleep.
+
+    verify:
+      path: ./benchmark/verifiers/retry_policy
+      command: python3 check.py
+
+  - id: webhook_verification
+    prompt: |
+      Using the Nimbus documentation, accept webhook deliveries. Verify the
+      signature with the SDK verifier, reject invalid signatures, and accept
+      only supported events.
+
+    verify:
+      path: ./benchmark/verifiers/webhook_verification
+      command: python3 check.py
+
+  - id: idempotent_request
+    prompt: |
+      Using the Nimbus documentation, implement idempotent user creation.
+      Pass the idempotency key through the current Users API so a repeated
+      key returns the original user.
+
+    verify:
+      path: ./benchmark/verifiers/idempotent_request
+      command: python3 check.py
+
+  - id: cache_integration
+    prompt: |
+      Using the Nimbus documentation, read users through the memory cache.
+      Use the documented key and TTL, return a cached dictionary on a hit,
+      and refresh it when the entry is missing or expired.
+
+    verify:
+      path: ./benchmark/verifiers/cache_integration
+      command: python3 check.py
+
+  - id: feature_flag
+    prompt: |
+      Using the Nimbus documentation, select the dashboard variant from the
+      new_dashboard flag. Use the documented fallback when the flag is off,
+      missing, or the flag service is unavailable.
+
+    verify:
+      path: ./benchmark/verifiers/feature_flag
+      command: python3 check.py
+
+  - id: plugin_registration
+    prompt: |
+      Using the Nimbus documentation, implement the audit plugin and register
+      it through the plugin registry. Recording a created user must happen
+      when the registry notifies plugins.
+
+    verify:
+      path: ./benchmark/verifiers/plugin_registration
+      command: python3 check.py
+
+  - id: config_precedence
+    prompt: |
+      Using the Nimbus documentation, implement layered configuration
+      loading. Honor explicit arguments, then the env mapping argument, then
+      the JSON file, then documented defaults. Do not read os.environ.
+
+    verify:
+      path: ./benchmark/verifiers/config_precedence
+      command: python3 check.py
+
+  - id: cli_command
+    prompt: |
+      Using the Nimbus documentation, implement the users list command.
+      Load the JSON directory, seed the local client, and print every user
+      by following the documented pagination rules.
+
+    verify:
+      path: ./benchmark/verifiers/cli_command
+      command: python3 check.py
+
+  - id: api_migration
+    prompt: |
+      Using the Nimbus documentation, migrate the existing user provisioning
+      helper off the deprecated client method. Keep the helper's name and
+      return the documented user dictionary from the current Users API.
+
+    verify:
+      path: ./benchmark/verifiers/api_migration
+      command: python3 check.py
+
+  - id: organization_sync
+    prompt: |
+      Using the Nimbus documentation, implement organization user import.
+      Page through the directory, retry only retryable failures, stop with
+      the documented application authentication error before creating an
+      organization, add every user as a member, and invalidate each user's
+      cache entry.
+
+    verify:
+      path: ./benchmark/verifiers/organization_sync
+      command: python3 check.py

@@ -1,0 +1,6 @@
+{
+  "api_key": "nim_live_example",
+  "base_url": "https://api.nimbus.local",
+  "timeout_seconds": 15,
+  "api_version": "2024-06-01"
+}

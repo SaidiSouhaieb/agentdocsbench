@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install AgentDocsBench
+        run: python -m pip install -e .
+      - name: Run unit tests
+        run: python -m pytest -q
+
+  docker-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install AgentDocsBench
+        run: python -m pip install -e .
+      - name: Build the fake smoke image
+        run: docker build -t agentdocs-docker-smoke:local examples/docker-smoke
+      - name: Run the fake Docker benchmark
+        run: |
+          agentdocs test \
+            --config examples/docker-smoke/agentdocs.yaml \
+            --runtime-config examples/docker-smoke/runtime.yaml \
+            --github-actions
+      - name: Check for leaked AgentDocsBench containers
+        if: always()
+        run: |
+          leaked="$(docker ps -a --format '{{.Names}}' | grep -E '^agentdocs-' || true)"
+          if [ -n "$leaked" ]; then
+            echo "Leaked AgentDocsBench containers:"
+            echo "$leaked"
+            exit 1
+          fi
+      - name: Upload structured smoke evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: docker-smoke
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            examples/docker-smoke/.agentdocs/runs/**/result.json
+            examples/docker-smoke/.agentdocs/runs/**/summary.md
+            examples/docker-smoke/.agentdocs/runs/**/benchmark.json
+            examples/docker-smoke/.agentdocs/runs/**/tasks/**/changes.json
+
+  docs-experiment-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install AgentDocsBench
+        run: python -m pip install -e .
+      - name: Build the fake docs-experiment image
+        run: docker build -t agentdocs-docs-experiment-smoke:local examples/docs-experiment-smoke
+      - name: Run the fake documentation experiment
+        run: |
+          agentdocs experiment \
+            --config examples/docs-experiment-smoke/agentdocs.yaml \
+            --experiment examples/docs-experiment-smoke/docs-experiment.yaml \
+            --runtime-config examples/docs-experiment-smoke/runtime.yaml \
+            --github-actions
+      - name: Check for leaked AgentDocsBench containers
+        if: always()
+        run: |
+          leaked="$(docker ps -a --format '{{.Names}}' | grep -E '^agentdocs-' || true)"
+          if [ -n "$leaked" ]; then
+            echo "Leaked AgentDocsBench containers:"
+            echo "$leaked"
+            exit 1
+          fi
+      - name: Upload structured experiment evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: docs-experiment-smoke
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            examples/docs-experiment-smoke/.agentdocs/experiments/**/experiment.json
+            examples/docs-experiment-smoke/.agentdocs/experiments/**/summary.md
+            examples/docs-experiment-smoke/.agentdocs/runs/**/result.json
+            examples/docs-experiment-smoke/.agentdocs/runs/**/summary.md
+            examples/docs-experiment-smoke/.agentdocs/runs/**/benchmark.json
+            examples/docs-experiment-smoke/.agentdocs/runs/**/tasks/**/changes.json

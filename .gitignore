@@ -1,0 +1,9 @@
+.agentdocs/
+__pycache__/
+*.py[cod]
+.venv/
+.venv-release-test/
+*.egg-info/
+dist/
+build/
+.pytest_cache/

@@ -1,0 +1,58 @@
+# Template only. This file is not a workflow in the AgentDocsBench repository.
+# Copy it to .github/workflows/agentdocs.yml in your repository and replace
+# the placeholders. See examples/github-actions/README.md.
+#
+# Do not switch this workflow to pull_request_target in order to run a
+# pull request's code with repository secrets.
+
+name: AgentDocsBench
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      # AgentDocsBench 0.1.0 is not published to PyPI.
+      # Point this at a local checkout, or at a git URL you control.
+      - name: Install AgentDocsBench
+        run: python -m pip install -e /path/to/agentdocsbench
+
+      # You own this image. It must already contain the provider CLI.
+      # AgentDocsBench does not publish provider images and does not log in.
+      - name: Build your agent image
+        run: docker build -t my-agent:local ./path/to/your/agent-image
+
+      - name: Run benchmark
+        env:
+          PROVIDER_TOKEN: ${{ secrets.PROVIDER_TOKEN }}
+        run: |
+          agentdocs test \
+            --config path/to/agentdocs.yaml \
+            --runtime-config path/to/runtime.yaml \
+            --github-actions
+
+      - name: Upload structured artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: agentdocs-run
+          retention-days: 7
+          if-no-files-found: warn
+          path: |
+            path/to/.agentdocs/runs/**/result.json
+            path/to/.agentdocs/runs/**/summary.md
+            path/to/.agentdocs/runs/**/benchmark.json
+            path/to/.agentdocs/runs/**/tasks/**/changes.json

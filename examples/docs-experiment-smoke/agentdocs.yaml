@@ -1,0 +1,16 @@
+version: 1
+
+docs: ./docs/reference
+starter: ./benchmark/starter
+
+agent:
+  type: cursor
+
+tasks:
+  - id: docs_task
+    prompt: |
+      Read /workspace/docs/instruction.txt and write result.txt as it says.
+
+    verify:
+      path: ./benchmark/verifiers/docs_task
+      command: python3 check.py

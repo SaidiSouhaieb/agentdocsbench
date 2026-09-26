@@ -1,0 +1,26 @@
+version: 1
+
+docs: ./docs
+starter: ./benchmark/starter
+
+agent:
+  type: codex
+
+tasks:
+  - id: create_user
+    prompt: |
+      Using the provided documentation,
+      create a user named Alice.
+
+    verify:
+      path: ./benchmark/verifiers/create_user
+      command: python3 check.py
+
+  - id: create_project
+    prompt: |
+      Using the provided documentation,
+      create the project marker.
+
+    verify:
+      path: ./benchmark/verifiers/create_project
+      command: python3 check.py

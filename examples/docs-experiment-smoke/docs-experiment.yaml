@@ -1,0 +1,10 @@
+version: 1
+
+reference: reference
+
+variants:
+  - id: reference
+    docs: ./docs/reference
+
+  - id: candidate
+    docs: ./docs/candidate

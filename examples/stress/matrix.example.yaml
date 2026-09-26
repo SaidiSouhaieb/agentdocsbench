@@ -1,0 +1,10 @@
+version: 1
+targets:
+  - id: cursor-default
+    agent: cursor
+  - id: codex-default
+    agent: codex
+  # Name a model only when you want that target to request one:
+  # - id: cursor-named
+  #   agent: cursor
+  #   model: <model-id>

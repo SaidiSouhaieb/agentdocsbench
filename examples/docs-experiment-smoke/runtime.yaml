@@ -1,0 +1,12 @@
+version: 1
+backend: docker
+
+agents:
+  cursor:
+    image: agentdocs-docs-experiment-smoke:local
+    network: bridge
+    env_passthrough: []
+    mounts: []
+
+verifier:
+  image: agentdocs-docs-experiment-smoke:local

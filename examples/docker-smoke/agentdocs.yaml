@@ -1,0 +1,16 @@
+version: 1
+
+docs: ./docs
+starter: ./benchmark/starter
+
+agent:
+  type: cursor
+
+tasks:
+  - id: docker_ok
+    prompt: |
+      Create result.txt containing DOCKER_OK.
+
+    verify:
+      path: ./benchmark/verifier
+      command: python3 check.py

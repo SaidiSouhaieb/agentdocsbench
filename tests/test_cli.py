@@ -1003,8 +1003,13 @@ def test_without_github_flag_leaves_github_files_untouched(
     assert output.read_text(encoding="utf-8") == "ORIGINAL\n"
 
 
-def test_github_actions_requires_the_job_environment(tmp_path: Path) -> None:
+def test_github_actions_requires_the_job_environment(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     config = _project(tmp_path)
+    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
+    monkeypatch.delenv("GITHUB_STEP_SUMMARY", raising=False)
+    monkeypatch.delenv("GITHUB_OUTPUT", raising=False)
 
     result = runner.invoke(app, ["test", "--config", str(config), "--github-actions"])
 

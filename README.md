@@ -1,8 +1,18 @@
 # AgentDocsBench
 
-AgentDocsBench tests whether coding agents can use documentation to complete programming tasks.
+<p align="center">
+  <img src="assets/brand/logo-mark.png" width="168" alt="AgentDocsBench logo">
+</p>
 
-A task is PASS or FAIL from a deterministic verifier. The agent's own claim that it is done does not decide the result. One run does not prove that a document is good, and it does not rank agents or models.
+<p align="center">
+  <img src="assets/brand/cover.png" width="1024" alt="AgentDocsBench. Test whether coding agents can actually build from your docs.">
+</p>
+
+Coding agents now read your docs and try to build the integration. A page that is clear to a person can still be the wrong page for Cursor, Claude Code, or Codex. The agent can say it is done and still miss the behavior.
+
+AgentDocsBench checks that gap. The agent gets the docs and a starter project, edits the project, and a verifier you wrote decides PASS or FAIL. Exit 0 is PASS. Anything else is FAIL. The agent's claim that it is done is not an input.
+
+You can also rerun the same task, starter, agent, model, and verifier, and change only the docs. If a task moves from FAIL to PASS, the observed transition is `newly_passing`. One run is an observation. It is not proof the edit caused the result, and it does not rank agents or models.
 
 ```text
 docs + starter + task
@@ -34,12 +44,6 @@ agentdocs test \
 
 Expected result: `docker_ok` PASS, and the process exits 0.
 
-## Why AgentDocsBench
-
-Documentation can be clear to a person and still be hard for a coding agent to follow. AgentDocsBench checks that gap with executable tasks: the agent gets the docs and a starter project, edits the project, and a verifier checks the result.
-
-Each task runs in its own temporary workspace. A finished run is saved as auditable artifacts. Schema and implementation notes live in [TECHNICAL.md](TECHNICAL.md).
-
 ## Documentation experiments
 
 A documentation experiment reruns the same starter, task, verifier, agent, model, and runtime. Only the docs change. AgentDocsBench then reports the observed task transitions.
@@ -65,15 +69,25 @@ agentdocs experiment \
 
 A no-credit version of that comparison is in [examples/docs-experiment-smoke/](examples/docs-experiment-smoke/). Commands for it are in the full section below.
 
+## Why this is different from asking the agent
+
+Asking Cursor, Claude Code, or Codex to implement a task, or to update the README, does not tell you whether the docs were enough. The verifier checks the behavior in the project. A finished run saves the PASS or FAIL, the project changes, the logs, and a benchmark fingerprint. Schema and implementation notes live in [TECHNICAL.md](TECHNICAL.md).
+
 ## Install
 
-Python 3.12 or newer is required. AgentDocsBench 0.1.0 is not published to PyPI. Install from a checkout:
+Python 3.12 or newer is required. Install from PyPI, or from a checkout of this repository:
+
+```bash
+python -m pip install agentdocsbench
+```
+
+From a checkout:
 
 ```bash
 python -m pip install -e .
 ```
 
-That install provides the `agentdocs` command.
+Either install provides the `agentdocs` command.
 
 ## Create your first benchmark
 
@@ -411,6 +425,10 @@ pytest
 ```
 
 The unit tests do not launch Codex, Claude, or Cursor, and they do not require a Docker daemon. The fake Docker jobs in CI are separate from `pytest`.
+
+## Visual assets
+
+The logo and cover are in [assets/brand/](assets/brand/). The LinkedIn carousel source is [assets/carousel/index.html](assets/carousel/index.html). Rendered pages are in [assets/carousel/output/](assets/carousel/output/).
 
 ## Contributing
 

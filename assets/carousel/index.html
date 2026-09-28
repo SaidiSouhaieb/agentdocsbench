@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AgentDocsBench</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0" aria-hidden="true">
+  <symbol id="i-doc" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 4h11l6 6v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/>
+    <path d="M18 4v7h7M11 18h10M11 23h6"/>
+  </symbol>
+  <symbol id="i-code" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 9l-6 7 6 7M19 9l6 7-6 7"/>
+  </symbol>
+  <symbol id="i-person" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="16" cy="11" r="4"/>
+    <path d="M7.5 26c1.4-4.2 4.2-6.2 8.5-6.2s7.1 2 8.5 6.2"/>
+  </symbol>
+  <symbol id="i-agent" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="6" width="24" height="20" rx="3"/>
+    <path d="M9 14l4 3-4 3M15 20h7"/>
+  </symbol>
+  <symbol id="i-branch" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="7" r="2.4"/>
+    <circle cx="23" cy="16" r="2.4"/>
+    <circle cx="9" cy="25" r="2.4"/>
+    <path d="M9 9.5v13M11.2 7h6.2a4 4 0 0 1 4 4v2.4"/>
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="16" cy="16" r="10"/>
+    <path d="M11 16.5l3.2 3.2 7-7.2"/>
+  </symbol>
+  <symbol id="i-hook" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="7" cy="16" r="2.5"/>
+    <circle cx="25" cy="7" r="2.5"/>
+    <circle cx="25" cy="25" r="2.5"/>
+    <path d="M9.4 15.1L22.6 8.2M9.4 16.9L22.6 23.8"/>
+  </symbol>
+  <symbol id="i-retry" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 16a8 8 0 1 0 2.3-5.6"/>
+    <path d="M8 6.5V12h5.5"/>
+  </symbol>
+  <symbol id="i-migrate" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="8" width="8" height="16" rx="1.6"/>
+    <path d="M15 16h7M19 12l4 4-4 4"/>
+    <rect x="24" y="8" width="5" height="16" rx="1.6"/>
+  </symbol>
+  <symbol id="i-lock" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="8" y="14" width="16" height="12" rx="2"/>
+    <path d="M12 14v-3a4 4 0 0 1 8 0v3"/>
+  </symbol>
+  <symbol id="i-sliders" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 10h22M5 16h22M5 22h22"/>
+    <circle cx="12" cy="10" r="2.2"/>
+    <circle cx="20" cy="16" r="2.2"/>
+    <circle cx="14" cy="22" r="2.2"/>
+  </symbol>
+  <symbol id="i-box" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 12l10-6 10 6-10 6-10-6z"/>
+    <path d="M6 12v8l10 6 10-6v-8M16 18v8"/>
+  </symbol>
+  <symbol id="i-print" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 6c-3 2.2-5 6-5 10s2 7.8 5 10M16 5v22M21 6c3 2.2 5 6 5 10s-2 7.8-5 10"/>
+  </symbol>
+  <symbol id="i-alert" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 5l13 22H3L16 5z"/>
+    <path d="M16 13v6M16 22.5v.6"/>
+  </symbol>
+  <symbol id="i-flow" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="5" width="9" height="7" rx="1.5"/>
+    <rect x="19" y="13" width="9" height="7" rx="1.5"/>
+    <rect x="4" y="20" width="9" height="7" rx="1.5"/>
+    <path d="M13 8.5h3.2A3.5 3.5 0 0 1 19.5 12v1M13 23.5h3.2A3.5 3.5 0 0 0 19.5 20v-.5"/>
+  </symbol>
+  <symbol id="i-docs" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 6h12l4 4v14H7z"/>
+    <path d="M13 10h12l-1 16H11"/>
+  </symbol>
+</svg>
+
+<section class="page grid cover" id="p1">
+  <div class="cover-main">
+    <img class="logo" src="../brand/logo-mark.png" alt="AgentDocsBench">
+    <h1 class="headline wordmark">Agent<span>Docs</span>Bench</h1>
+    <p class="message">Can coding agents actually<br>build from your documentation?</p>
+    <p class="body support">The verifier decides PASS or FAIL. The agent does not.</p>
+  </div>
+  <div class="flow mini-flow">
+    <article class="pipeline-card">
+      <svg class="icon"><use href="#i-doc"/></svg>
+      <span class="label">Docs<span class="caption">instructions</span></span>
+    </article>
+    <span class="arrow" aria-hidden="true">&#8594;</span>
+    <article class="pipeline-card">
+      <svg class="icon"><use href="#i-agent"/></svg>
+      <span class="label">Agent<span class="caption">edits the starter</span></span>
+    </article>
+    <span class="arrow" aria-hidden="true">&#8594;</span>
+    <article class="pipeline-card">
+      <svg class="icon"><use href="#i-check"/></svg>
+      <span class="label">Verifier<span class="caption">checks behavior</span></span>
+    </article>
+    <span class="arrow" aria-hidden="true">&#8594;</span>
+    <span class="badge badge-pass">PASS</span>
+  </div>
+</section>
+
+<section class="page grid" id="p2">
+  <header class="bar">
+    <img class="logo" src="../brand/logo-mark.png" alt="">
+    <span class="wordmark">Agent<span>Docs</span>Bench</span>
+    <span class="index">02</span>
+  </header>
+  <h1 class="headline">The agent can finish<br>and still be wrong.</h1>
+  <p class="lede">A page that is clear to a person can still be the wrong page for a coding agent.</p>
+  <div class="stack">
+    <div class="beats">
+      <article class="beat">
+        <div class="beat-mark">
+          <svg class="icon"><use href="#i-doc"/></svg>
+          <span class="rail"></span>
+        </div>
+        <pre class="snippet"><span class="kicker">The docs</span>Pagination
+The next page is <span class="token">next_page</span>.</pre>
+      </article>
+      <article class="beat">
+        <div class="beat-mark">
+          <svg class="icon"><use href="#i-agent"/></svg>
+          <span class="rail"></span>
+        </div>
+        <pre class="snippet"><span class="kicker">The agent</span><span class="dim">Cursor, Claude Code, or Codex</span>
+Implemented pagination.
+Done.</pre>
+      </article>
+      <article class="beat">
+        <div class="beat-mark">
+          <svg class="icon"><use href="#i-check"/></svg>
+          <span class="rail"></span>
+        </div>
+        <pre class="snippet fail"><span class="kicker">The verifier</span>pagination          <span class="bad">FAIL</span>
+<span class="dim">The project did not follow the docs.</span></pre>
+      </article>
+    </div>
+  </div>
+  <p class="footer">Asking the agent to update the README does not check the behavior.</p>
+</section>
+
+<section class="page grid" id="p3">
+  <header class="bar">
+    <img class="logo" src="../brand/logo-mark.png" alt="">
+    <span class="wordmark">Agent<span>Docs</span>Bench</span>
+    <span class="index">03</span>
+  </header>
+  <h1 class="headline">Don&rsquo;t trust &ldquo;Done.&rdquo;<br>Verify the implementation.</h1>
+  <p class="lede">One task. The agent edits a starter. Your check decides the result.</p>
+  <div class="stack">
+    <div class="steps">
+      <article class="card step">
+        <span class="num">01</span>
+        <svg class="icon"><use href="#i-doc"/></svg>
+        <div>
+          <h2>Docs</h2>
+          <p>The instructions the agent is allowed to read.</p>
+        </div>
+      </article>
+      <article class="card step">
+        <span class="num">02</span>
+        <svg class="icon"><use href="#i-agent"/></svg>
+        <div>
+          <h2>Coding agent</h2>
+          <p>Cursor, Claude Code, or Codex edits the starter.</p>
+        </div>
+      </article>
+      <article class="card step">
+        <span class="num">03</span>
+        <svg class="icon"><use href="#i-branch"/></svg>
+        <div>
+          <h2>Project changes</h2>
+          <p>Added, modified, and deleted paths are saved.</p>
+        </div>
+      </article>
+      <article class="card step">
+        <span class="num">04</span>
+        <svg class="icon"><use href="#i-check"/></svg>
+        <div>
+          <h2>Verifier</h2>
+          <p>Your check. Exit 0 is PASS. Anything else is FAIL.</p>
+        </div>
+      </article>
+    </div>
+    <div class="judge">
+      <p class="body">The agent&rsquo;s claim is not an input.</p>
+      <div class="outcomes">
+        <span class="badge badge-pass">PASS</span>
+        <span class="badge badge-fail">FAIL</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page grid" id="p4">
+  <header class="bar">
+    <img class="logo" src="../brand/logo-mark.png" alt="">
+    <span class="wordmark">Agent<span>Docs</span>Bench</span>
+    <span class="index">04</span>
+  </header>
+  <h1 class="headline">What happens when<br>the documentation changes?</h1>
+  <p class="lede">Rerun the same task. Swap the docs. Read the transition.</p>
+  <div class="stack">
+    <div class="pair">
+      <article class="result-card">
+        <p class="result-kicker">Reference docs</p>
+        <div class="result-row">
+          <span>pagination</span>
+          <span class="badge badge-fail">FAIL</span>
+        </div>
+      </article>
+      <div class="pair-mid" aria-hidden="true">&#8594;</div>
+      <article class="result-card">
+        <p class="result-kicker">Candidate docs</p>
+        <div class="result-row">
+          <span>pagination</span>
+          <span class="badge badge-pass">PASS</span>
+        </div>
+      </article>
+    </div>
+    <ul class="held">
+      <li><strong>Held fixed</strong><span>task, starter, agent, model, verifier</span></li>
+      <li class="only"><strong>Only docs changed</strong><span>the documentation directory</span></li>
+    </ul>
+    <div class="transition">
+      <div>
+        <p class="eyebrow">Observed transition</p>
+        <p class="body" style="margin-top:8px;font-size:24px">FAIL became PASS on this run.</p>
+      </div>
+      <span class="badge badge-new">NEWLY PASSING</span>
+    </div>
+  </div>
+  <p class="footer disclaimer">One run is an observation, not causal or statistical proof.</p>
+</section>
+
+<section class="page grid" id="p5">
+  <header class="bar">
+    <img class="logo" src="../brand/logo-mark.png" alt="">
+    <span class="wordmark">Agent<span>Docs</span>Bench</span>
+    <span class="index">05</span>
+  </header>
+  <h1 class="headline">Check the behavior<br>the docs describe.</h1>
+  <p class="lede">You write the verifier. It checks the project, not the agent&rsquo;s summary.</p>
+  <div class="stack">
+    <div class="tasks">
+      <article class="card">
+        <svg class="icon"><use href="#i-doc"/></svg>
+        <h2>Pagination</h2>
+        <p>The next page follows the cursor the docs name.</p>
+      </article>
+      <article class="card">
+        <svg class="icon"><use href="#i-hook"/></svg>
+        <h2>Webhook verification</h2>
+        <p>The signature check matches the documented scheme.</p>
+      </article>
+      <article class="card">
+        <svg class="icon"><use href="#i-retry"/></svg>
+        <h2>Retry behavior</h2>
+        <p>Retries stop where the docs say they stop.</p>
+      </article>
+      <article class="card">
+        <svg class="icon"><use href="#i-migrate"/></svg>
+        <h2>SDK migration</h2>
+        <p>Calls follow the migration guide, not the old client.</p>
+      </article>
+      <article class="card">
+        <svg class="icon"><use href="#i-lock"/></svg>
+        <h2>Authentication</h2>
+        <p>The request is signed the way the docs describe.</p>
+      </article>
+      <article class="card">
+        <svg class="icon"><use href="#i-sliders"/></svg>
+        <h2>Configuration</h2>
+        <p>Settings are read from the documented place.</p>
+      </article>
+    </div>
+  </div>
+  <p class="footer">Examples of checks you can write. Not a bundled task suite.</p>
+</section>
+
+<section class="page grid" id="p6">
+  <header class="bar">
+    <img class="logo" src="../brand/logo-mark.png" alt="">
+    <span class="wordmark">Agent<span>Docs</span>Bench</span>
+    <span class="index">06</span>
+  </header>
+  <h1 class="headline">You bring the check.<br>The harness runs it.</h1>
+  <div class="stack">
+    <div class="split">
+      <div class="panel-list">
+        <p class="eyebrow">You bring</p>
+        <article class="card bring">
+          <h2>Docs</h2>
+          <p>What the agent may read for the task.</p>
+        </article>
+        <article class="card bring">
+          <h2>Starter</h2>
+          <p>The project the agent is allowed to edit.</p>
+        </article>
+        <article class="card bring">
+          <h2>Verifier</h2>
+          <p>The behavior check. Exit 0 is PASS.</p>
+        </article>
+      </div>
+      <article class="card harness">
+        <p class="eyebrow" style="padding:18px 18px 0">The harness</p>
+        <div class="harness-row">
+          <svg class="icon"><use href="#i-agent"/></svg>
+          <div>
+            <h2>Cursor, Claude Code, or Codex</h2>
+            <p>The agent that edits the starter.</p>
+          </div>
+        </div>
+        <div class="harness-row">
+          <svg class="icon"><use href="#i-branch"/></svg>
+          <div>
+            <h2>Project changes</h2>
+            <p>Added, modified, and deleted paths are recorded.</p>
+          </div>
+        </div>
+        <div class="harness-row">
+          <svg class="icon"><use href="#i-print"/></svg>
+          <div>
+            <h2>Benchmark fingerprint</h2>
+            <p>Hashes docs, starter, tasks, and verifiers.</p>
+          </div>
+        </div>
+        <div class="harness-row">
+          <svg class="icon"><use href="#i-box"/></svg>
+          <div>
+            <h2>Optional Docker isolation</h2>
+            <p>Agent and verifier can run in separate containers.</p>
+          </div>
+        </div>
+        <div class="harness-row">
+          <svg class="icon"><use href="#i-alert"/></svg>
+          <div>
+            <h2>Provider failures stay separate</h2>
+            <p>A provider error is not recorded as a task FAIL.</p>
+          </div>
+        </div>
+        <div class="harness-row">
+          <svg class="icon"><use href="#i-docs"/></svg>
+          <div>
+            <h2>Documentation experiments</h2>
+            <p>Only the docs change between variants.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+  <p class="footer">The same commands run in GitHub Actions.</p>
+</section>
+
+<section class="page grid cta" id="p7">
+  <img class="logo" src="../brand/logo-mark.png" alt="AgentDocsBench">
+  <h1 class="headline wordmark">Agent<span>Docs</span>Bench</h1>
+  <p class="message">Test the developer experience<br>your AI-assisted users actually get.</p>
+  <p class="open">Open source</p>
+  <div class="terminal">
+    <div class="terminal-top">
+      <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="terminal-title">agentdocs</span>
+    </div>
+    <div class="terminal-body">
+      <div class="cmd"><span class="prompt">$</span>agentdocs init my-benchmark --agent cursor</div>
+      <p class="hint">writes a small benchmark</p>
+      <div class="cmd"><span class="prompt">$</span>agentdocs doctor --config agentdocs.yaml</div>
+      <p class="hint">checks setup, does not run an agent</p>
+      <div class="cmd"><span class="prompt">$</span>agentdocs test --config agentdocs.yaml</div>
+      <p class="hint">the verifier decides PASS or FAIL</p>
+    </div>
+  </div>
+  <p class="repo">github.com/SaidiSouhaieb/agentdocsbench</p>
+</section>
+
+<script>
+const id = location.hash.replace("#", "");
+if (id) {
+  document.querySelectorAll(".page").forEach((page) => {
+    page.hidden = page.id !== id;
+  });
+}
+</script>
+</body>
+</html>

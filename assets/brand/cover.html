@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AgentDocsBench cover</title>
+  <style>
+    :root {
+      --bg: #04080b;
+      --panel: #071016;
+      --line: #1a4554;
+      --text: #ffffff;
+      --muted: #8ea3ae;
+      --faint: #6d828c;
+      --cyan: #2af0ff;
+      --pass: #3fbc90;
+      --fail: #ff5c6a;
+      --sans: Inter, system-ui, -apple-system, "Segoe UI", Arial, Helvetica, sans-serif;
+      --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      width: 1024px;
+      height: 341px;
+      overflow: hidden;
+      background: var(--bg);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .cover {
+      position: relative;
+      width: 1024px;
+      height: 341px;
+      padding: 14px 28px 12px;
+      overflow: hidden;
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(rgba(42, 240, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42, 240, 255, 0.045) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    .curve {
+      position: absolute;
+      inset: 0;
+      width: 1024px;
+      height: 341px;
+      pointer-events: none;
+    }
+
+    .top {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      height: 22px;
+      gap: 16px;
+    }
+
+    .mini {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #9fb0b8;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .mini .chev { color: var(--cyan); font-family: var(--mono); }
+
+    .dots {
+      display: flex;
+      gap: 7px;
+      margin-left: 28px;
+      opacity: 0.45;
+    }
+
+    .dots i {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #8fb8c4;
+      display: block;
+    }
+
+    .meta {
+      margin-left: auto;
+      color: #9aafb8;
+      font-size: 9px;
+      font-weight: 650;
+      letter-spacing: 0.14em;
+    }
+
+    .meta span { margin: 0 7px; color: #5f7680; }
+
+    .ear {
+      margin-left: 16px;
+      width: 18px;
+      height: 18px;
+      color: #9aafb8;
+    }
+
+    .stage {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 292px;
+      column-gap: 18px;
+      margin-top: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 58px;
+      line-height: 0.9;
+      font-weight: 760;
+      letter-spacing: -0.045em;
+      color: white;
+    }
+
+    h1 span {
+      background: linear-gradient(180deg, #d8fdff 0%, #3df2ff 55%, #14e4f2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .sub {
+      margin: 8px 0 0;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #f4f8fa;
+    }
+
+    .flow {
+      display: flex;
+      align-items: stretch;
+      gap: 7px;
+      margin-top: 16px;
+    }
+
+    .card {
+      flex: 1;
+      min-width: 0;
+      height: 112px;
+      padding: 10px 6px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: rgba(6, 16, 22, 0.92);
+      border: 1px solid rgba(42, 190, 210, 0.45);
+      border-radius: 12px;
+      box-shadow: inset 0 0 0 1px rgba(42, 240, 255, 0.04), 0 0 18px rgba(42, 240, 255, 0.05);
+    }
+
+    .card svg { width: 22px; height: 22px; color: #d7f7ff; }
+
+    .card strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: white;
+    }
+
+    .card em {
+      display: block;
+      margin-top: 3px;
+      font-style: normal;
+      font-size: 6.5px;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      color: #8ea3ae;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .arrow {
+      align-self: center;
+      color: var(--cyan);
+      font-size: 14px;
+      flex: 0 0 auto;
+    }
+
+    .pass {
+      border-color: rgba(63, 188, 144, 0.85);
+      background: rgba(8, 28, 24, 0.95);
+      box-shadow: 0 0 22px rgba(63, 188, 144, 0.28), inset 0 0 0 1px rgba(63, 188, 144, 0.2);
+    }
+
+    .pass .tick {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1.5px solid var(--pass);
+      color: var(--pass);
+      display: grid;
+      place-items: center;
+    }
+
+    .pass .tick svg { width: 14px; height: 14px; color: var(--pass); }
+
+    .pass strong {
+      margin-top: 6px;
+      color: var(--pass);
+      letter-spacing: 0.08em;
+      font-size: 13px;
+    }
+
+    .pass em { color: #7dcaa8; letter-spacing: 0.06em; }
+
+    .terminal {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      align-self: center;
+      margin-top: 8px;
+      background: #071116;
+      border: 1px solid #1b3c48;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .term-top {
+      height: 28px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      border-bottom: 1px solid #16313c;
+      background: #0a1419;
+    }
+
+    .lights { display: flex; gap: 5px; }
+    .lights i { width: 8px; height: 8px; border-radius: 50%; display: block; }
+    .lights i:nth-child(1) { background: #ff5f57; }
+    .lights i:nth-child(2) { background: #febc2e; }
+    .lights i:nth-child(3) { background: #28c840; }
+
+    .term-title {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: #9aafb8;
+    }
+
+    .pill {
+      margin-left: 6px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: rgba(63, 188, 144, 0.18);
+      color: var(--pass);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .term-body { padding: 8px 12px 8px; }
+
+    .cmd {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .cmd b { color: var(--cyan); font-weight: 700; }
+
+    .row {
+      display: grid;
+      grid-template-columns: 10px 1fr auto 42px;
+      align-items: center;
+      gap: 6px;
+      height: 18px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #d5e4ea;
+    }
+
+    .row .bullet { color: #6d828c; }
+
+    .badge {
+      min-width: 42px;
+      height: 14px;
+      padding: 0 5px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .badge.ok { color: #073226; background: #3fbc90; }
+    .badge.no { color: #3a0d14; background: #ff5c6a; }
+
+    .time { color: #8ea3ae; text-align: right; }
+
+    .sum {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid #16313c;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: #9aafb8;
+    }
+
+    .sum .g { color: var(--pass); font-weight: 700; }
+    .sum .r { color: var(--fail); font-weight: 700; }
+
+    .foot {
+      position: absolute;
+      z-index: 2;
+      left: 28px;
+      right: 28px;
+      bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #7f949e;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+    }
+
+    .foot .right { display: flex; align-items: center; gap: 8px; }
+    .bars { display: flex; align-items: flex-end; gap: 2px; height: 12px; }
+    .bars i { display: block; width: 3px; background: var(--cyan); border-radius: 1px; }
+    .bars i:nth-child(1) { height: 5px; }
+    .bars i:nth-child(2) { height: 8px; }
+    .bars i:nth-child(3) { height: 12px; }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <svg class="curve" viewBox="0 0 1024 341" aria-hidden="true">
+      <path d="M-20 250 C 180 270, 360 210, 560 230 S 820 120, 1080 150" fill="none" stroke="#2af0ff" stroke-width="1.6" opacity="0.55"/>
+      <path d="M80 300 C 260 250, 480 280, 700 200 S 920 250, 1100 210" fill="none" stroke="#147a90" stroke-width="1.2" opacity="0.45"/>
+    </svg>
+
+    <header class="top">
+      <div class="mini"><span class="chev">&gt;_</span> AgentDocsBench</div>
+      <div class="dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="meta">OPEN SOURCE<span>•</span>EVALS FOR REAL-WORLD DOCS<span>•</span>BETTER AGENTS</div>
+      <svg class="ear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <path d="M5 13a7 7 0 0 1 14 0" stroke-linecap="round"/>
+        <rect x="3" y="13" width="4" height="6" rx="1.4"/>
+        <rect x="17" y="13" width="4" height="6" rx="1.4"/>
+      </svg>
+    </header>
+
+    <div class="stage">
+      <div>
+        <h1>Agent<span>Docs</span>Bench</h1>
+        <p class="sub">Test whether coding agents can actually build from your docs.</p>
+        <div class="flow">
+          <article class="card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>
+            <strong>Docs</strong>
+            <em>YOUR DOCUMENTATION</em>
+          </article>
+          <span class="arrow">&#8594;</span>
+          <article class="card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4"/></svg>
+            <strong>Coding Agent</strong>
+            <em>TURNS DOCS INTO CODE</em>
+          </article>
+          <span class="arrow">&#8594;</span>
+          <article class="card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="6" r="1.6"/><circle cx="17" cy="12" r="1.6"/><circle cx="7" cy="18" r="1.6"/><path d="M7 7.6v8.8M8.5 6H13a3 3 0 0 1 3 3v1.4"/></svg>
+            <strong>Project Changes</strong>
+            <em>GENERATES A PR / DIFF</em>
+          </article>
+          <span class="arrow">&#8594;</span>
+          <article class="card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="7"/><path d="M9 12.2l2 2 4-4.2"/></svg>
+            <strong>Verifier</strong>
+            <em>BUILDS, TESTS, CHECKS</em>
+          </article>
+          <span class="arrow">&#8594;</span>
+          <article class="card pass">
+            <span class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12.5l4.2 4.2L19 7"/></svg></span>
+            <strong>PASS</strong>
+            <em>DOCS ARE IMPLEMENTABLE</em>
+          </article>
+        </div>
+      </div>
+
+      <aside class="terminal">
+        <div class="term-top">
+          <span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="term-title">agentdocsbench</span>
+          <span class="pill">main</span>
+        </div>
+        <div class="term-body">
+          <div class="cmd"><b>$</b> agentdocsbench run</div>
+          <div class="row"><span class="bullet">•</span><span>pagination</span><span class="badge ok">PASS</span><span class="time">12.4s</span></div>
+          <div class="row"><span class="bullet">•</span><span>webhooks</span><span class="badge no">FAIL</span><span class="time">8.7s</span></div>
+          <div class="row"><span class="bullet">•</span><span>migration</span><span class="badge ok">PASS</span><span class="time">16.1s</span></div>
+          <div class="row"><span class="bullet">•</span><span>auth</span><span class="badge ok">PASS</span><span class="time">9.3s</span></div>
+          <div class="row"><span class="bullet">•</span><span>rate-limits</span><span class="badge ok">PASS</span><span class="time">11.6s</span></div>
+          <div class="row"><span class="bullet">•</span><span>cli</span><span class="badge ok">PASS</span><span class="time">10.2s</span></div>
+          <div class="sum"><span class="g">5 passed</span><span class="r">1 failed</span><span>6 total</span><span>68.3s</span></div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="foot">
+      <span>REAL DOCS. REAL PROJECTS. REAL RESULTS.</span>
+      <span class="right"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span>TURNING DOCUMENTATION INTO WORKING SOFTWARE.</span>
+    </footer>
+  </div>
+</body>
+</html>

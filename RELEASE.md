@@ -4,7 +4,17 @@ AgentDocsBench 0.1.0 is prepared as a source release. This file does not publish
 
 ## Still open
 
-The package is not published to PyPI. `pyproject.toml` has no homepage or repository URL because those were not recorded in the project.
+`v0.1.0` is published on PyPI as `agentdocsbench`. The repository URL is in `pyproject.toml`.
+
+## GitHub social preview
+
+GitHub does not read the social preview from the README. Upload it by hand:
+
+1. Open the repository on GitHub.
+2. Go to Settings, then General, then Social preview.
+3. Upload `assets/brand/social-preview.png`.
+
+Nothing in this repository applies that setting.
 
 `LICENSE` is the MIT license, matching the license already used on the public `promptly-lite` repository. The copyright line is Souhaieb Saidi, 2026.
 

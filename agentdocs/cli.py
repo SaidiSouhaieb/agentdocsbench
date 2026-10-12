@@ -950,6 +950,10 @@ def _render_model_discovery(result: ModelDiscoveryResult) -> None:
         _plain("  CLI: not installed")
         if result.message:
             _plain(f"  {result.message}")
+        _plain(
+            "  Hint: Install the provider CLI and make sure it is on PATH. "
+            "Run `agentdocs doctor` to check the environment."
+        )
         return
     _plain("  CLI: installed")
     if result.status == "available":
@@ -964,6 +968,11 @@ def _render_model_discovery(result: ModelDiscoveryResult) -> None:
         _plain("  Discovery: failed")
     if result.message:
         _plain(f"  {result.message}")
+    if result.status == "failed":
+        _plain(
+            "  Hint: Check the provider CLI installation and authentication, "
+            "then retry `agentdocs models`."
+        )
 
 
 def _render_model_rows(models: tuple[ModelInfo, ...]) -> None:
